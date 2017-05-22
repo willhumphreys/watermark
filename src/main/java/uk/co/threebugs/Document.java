@@ -1,5 +1,7 @@
 package uk.co.threebugs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Document {
     private String title;
     private String author;
@@ -29,6 +31,7 @@ public class Document {
         this.watermark = watermark;
     }
 
+    @JsonIgnore
     public String getId() {
         return author + title;
     }

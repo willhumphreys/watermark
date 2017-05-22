@@ -14,7 +14,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class WatermarkDataRepository {
 
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
-    private static final int DUMMY_SLEEP_TIME = 2000;
+    private static final int DUMMY_SLEEP_TIME = 5000;
 
     private final Map<String, Map<String, Watermark>> watermarks;
 

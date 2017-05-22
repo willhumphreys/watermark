@@ -14,7 +14,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class WatermarkDataRepository {
 
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
-    private static final int DUMMY_SLEEP_TIME = 5000;
+    private static final int DUMMY_SLEEP_TIME = 2000;
 
     private final Map<String, Map<String, Watermark>> watermarks;
 
@@ -48,14 +48,15 @@ public class WatermarkDataRepository {
             LOG.error("The watermarking lookup got interrupted.", e);
         }
 
-        boolean isAuthorMissing = !watermarks.containsKey(author);
-        boolean isTitleMissing = !watermarks.get(author).containsKey(title);
-
         //If we haven't got the records in supplied dummy data then generate new dummy data
         // to give the appearance this is a real service.
-        if (isAuthorMissing || isTitleMissing) {
-            return new Watermark(author, title, "book", "Science");
+        if (isAuthorOrTitleMissing(author, title)) {
+            return new Watermark(title, author, "book", "Science");
         }
         return watermarks.get(author).get(title);
+    }
+
+    private boolean isAuthorOrTitleMissing(String author, String title) {
+        return !watermarks.containsKey(author) || !watermarks.get(author).containsKey(title);
     }
 }

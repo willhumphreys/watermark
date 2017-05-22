@@ -18,7 +18,6 @@ class WatermarkService {
     private static final int DOCUMENTS_QUEUE_SIZE = 100;
     private static final Logger LOG = getLogger(lookup().lookupClass());
     private final ExecutorService exService;
-    private final FutureTask<String> task;
     private Map<String, Document> documentMap;
     private ArrayBlockingQueue<Document> documentsToWaterMark;
     private boolean alive;
@@ -32,7 +31,7 @@ class WatermarkService {
         alive = true;
         exService = Executors.newSingleThreadExecutor();
         documentsToWaterMark = new ArrayBlockingQueue<>(DOCUMENTS_QUEUE_SIZE);
-        task = new FutureTask<>(getAddWatermarkCallable());
+        FutureTask<String> task = new FutureTask<>(getAddWatermarkCallable());
         exService.submit(task);
         documentMap = new HashMap<>();
     }

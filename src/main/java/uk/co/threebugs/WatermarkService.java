@@ -39,9 +39,7 @@ class WatermarkService {
 
     private Callable<String> getAddWatermarkCallable() {
         return () -> {
-
             while (alive) {
-
                 Document documentToWatermark = documentsToWaterMark.take();
 
                 Watermark watermark = watermarkDataRepository.lookup(documentToWatermark.getAuthor(),
@@ -50,6 +48,7 @@ class WatermarkService {
                 documentToWatermark.addWatermark(watermark);
             }
 
+            LOG.info("Finished pulling documents from the watermark queue");
             return String.format("Shutting Down. Watermarks left on queue: %d",
                     documentsToWaterMark.size());
         };
@@ -92,14 +91,8 @@ class WatermarkService {
 
     @PreDestroy
     public void shutdown() throws InterruptedException, ExecutionException {
-        LOG.info("Shutting down");
         alive = false;
-        exService.shutdown();
-
-        String taskFinishedMessage = task.get();
-        LOG.info("Task finished: " + taskFinishedMessage);
-
-        exService.awaitTermination(1, TimeUnit.MINUTES);
+        exService.shutdownNow();
         LOG.info("Watermark service shutdown");
     }
 }

@@ -1,6 +1,7 @@
 package uk.co.threebugs;
 
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PreDestroy;
@@ -21,8 +22,13 @@ class WatermarkService {
     private Map<String, Document> documentMap;
     private ArrayBlockingQueue<Document> documentsToWaterMark;
     private boolean alive;
+    private WatermarkDataRepository watermarkDataRepository;
 
-    public WatermarkService() {
+    @Autowired
+    public WatermarkService(WatermarkDataRepository watermarkDataRepository) {
+
+        this.watermarkDataRepository = watermarkDataRepository;
+
         alive = true;
         exService = Executors.newSingleThreadExecutor();
         documentsToWaterMark = new ArrayBlockingQueue<>(DOCUMENTS_QUEUE_SIZE);
@@ -40,11 +46,8 @@ class WatermarkService {
 
                 Document documentToWatermark = documentsToWaterMark.take();
 
-                Watermark watermark = new Watermark(
-                        documentToWatermark.getTitle(),
-                        documentToWatermark.getAuthor(),
-                        "book",
-                        "Science");
+                Watermark watermark = watermarkDataRepository.lookup(documentToWatermark.getAuthor(),
+                        documentToWatermark.getTitle());
 
                 documentToWatermark.addWatermark(watermark);
             }

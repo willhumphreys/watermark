@@ -42,8 +42,6 @@ class WatermarkService {
 
             while (alive) {
 
-                Thread.sleep(5000);
-
                 Document documentToWatermark = documentsToWaterMark.take();
 
                 Watermark watermark = watermarkDataRepository.lookup(documentToWatermark.getAuthor(),

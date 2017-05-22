@@ -28,13 +28,13 @@ public class WatermarkApplicationTests {
 
         Document document = new Document("The Dark Code", "Bruce Wayne");
         HttpEntity<Document> request = new HttpEntity<>(document);
-        Ticket ticket = this.restTemplate.postForObject("/api/watermark", request,
+        Ticket ticket = this.restTemplate.postForObject("/api/submit", request,
                 Ticket.class);
 
         String id = ticket.getId();
 
         ResponseEntity<Document> waterMarkedDocumentEntity =
-                this.restTemplate.getForEntity("/api/watermark?ticket=" + id,
+                this.restTemplate.getForEntity("/api/submit?ticket=" + id,
                         Document.class);
 
         assertThat(waterMarkedDocumentEntity.getStatusCode(), is(equalTo(HttpStatus.ACCEPTED)));
@@ -46,7 +46,7 @@ public class WatermarkApplicationTests {
 
         Document document = new Document("The Dark Code", "Bruce Wayne");
         HttpEntity<Document> request = new HttpEntity<>(document);
-        Ticket ticket = this.restTemplate.postForObject("/api/watermark", request,
+        Ticket ticket = this.restTemplate.postForObject("/api/submit", request,
                 Ticket.class);
 
         String id = ticket.getId();
@@ -75,7 +75,7 @@ public class WatermarkApplicationTests {
 
         Document document = new Document("Journal of human flight routes", "Clark Kent");
         HttpEntity<Document> request = new HttpEntity<>(document);
-        Ticket ticket = this.restTemplate.postForObject("/api/watermark", request,
+        Ticket ticket = this.restTemplate.postForObject("/api/submit", request,
                 Ticket.class);
 
         String id = ticket.getId();
@@ -103,7 +103,7 @@ public class WatermarkApplicationTests {
         ResponseEntity<Document> waterMarkedDocumentEntity;
         do {
             waterMarkedDocumentEntity =
-                    this.restTemplate.getForEntity("/api/watermark?ticket=" + id,
+                    this.restTemplate.getForEntity("/api/submit?ticket=" + id,
                             Document.class);
 
             try {

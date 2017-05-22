@@ -1,4 +1,4 @@
-##Build and run
+## Build and run
 
 You can use the `service.sh` script to build and run the application.
 

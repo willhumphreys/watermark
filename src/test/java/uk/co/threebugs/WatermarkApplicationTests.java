@@ -28,7 +28,7 @@ public class WatermarkApplicationTests {
 
         Document document = new Document("The Dark Code", "Bruce Wayne");
         HttpEntity<Document> request = new HttpEntity<>(document);
-        Ticket ticket = this.restTemplate.postForObject("/api/submit", request,
+        Ticket ticket = this.restTemplate.postForObject("/api/watermark", request,
                 Ticket.class);
 
         String id = ticket.getId();
@@ -46,7 +46,7 @@ public class WatermarkApplicationTests {
 
         Document document = new Document("The Dark Code", "Bruce Wayne");
         HttpEntity<Document> request = new HttpEntity<>(document);
-        Ticket ticket = this.restTemplate.postForObject("/api/submit", request,
+        Ticket ticket = this.restTemplate.postForObject("/api/watermark", request,
                 Ticket.class);
 
         String id = ticket.getId();
@@ -75,7 +75,7 @@ public class WatermarkApplicationTests {
 
         Document document = new Document("Journal of human flight routes", "Clark Kent");
         HttpEntity<Document> request = new HttpEntity<>(document);
-        Ticket ticket = this.restTemplate.postForObject("/api/submit", request,
+        Ticket ticket = this.restTemplate.postForObject("/api/watermark", request,
                 Ticket.class);
 
         String id = ticket.getId();

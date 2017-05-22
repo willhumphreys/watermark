@@ -10,7 +10,7 @@ You can use the `service.sh` script to build and run the application.
 
 
 If you have `docker` installed on your machine, you can also run all the
-scripts and tests inside a docker container:
+scripts inside a docker container:
 
 ```
 ./service.sh docker_build : packages your app into a docker image

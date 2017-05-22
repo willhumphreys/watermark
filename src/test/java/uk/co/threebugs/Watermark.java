@@ -18,6 +18,9 @@ public class Watermark {
         this.content = content;
     }
 
+    public Watermark() {
+    }
+
     public String getTitle() {
         return title;
     }

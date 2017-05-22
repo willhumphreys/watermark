@@ -1,5 +1,6 @@
 package uk.co.threebugs;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,14 @@ public class WatermarkApplicationTests {
 
     @Autowired
     private TestRestTemplate restTemplate;
+
+    @Autowired
+    private WatermarkService watermarkService;
+
+    @Before
+    public void setUp() throws Exception {
+        watermarkService.clear();
+    }
 
     @Test
     public void shouldReturnAStatusCodeOfAcceptedWhenTicketInitiallyChecked() {

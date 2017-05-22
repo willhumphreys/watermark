@@ -20,7 +20,7 @@ class WatermarkController {
 
         WatermarkResult watermarkResult = watermarkService.submit(document);
 
-        if (watermarkResult.isAlreadySubmitted()) {
+        if (watermarkResult.getStatus() == Status.AlreadySubmitted) {
 
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }

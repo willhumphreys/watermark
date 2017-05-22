@@ -1,5 +1,9 @@
 package uk.co.threebugs;
 
 public enum Status {
-    AlreadyProcessing, UnknownTicket, Complete
+    AlreadyProcessing,
+    UnknownTicket,
+    AlreadySubmitted,
+    Submitted,
+    Complete
 }

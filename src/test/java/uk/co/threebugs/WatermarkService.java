@@ -17,6 +17,7 @@ class WatermarkService {
 
         ExecutorService exService = Executors.newSingleThreadExecutor();
 
+        documentsToWaterMark = new ArrayBlockingQueue<>(100);
 
         exService.submit(new FutureTask<>(getAddWatermarkCallable()));
 
@@ -30,12 +31,14 @@ class WatermarkService {
 
             while (alive) {
 
+                Thread.sleep(5000);
+
                 Document documentToWatermark = documentsToWaterMark.take();
 
                 Watermark watermark = new Watermark(
-                        "book",
                         documentToWatermark.getTitle(),
                         documentToWatermark.getAuthor(),
+                        "book",
                         "Science");
 
                 documentToWatermark.addWatermark(watermark);
@@ -51,13 +54,10 @@ class WatermarkService {
         Document existingDocument = documentMap.get(id);
 
         if (existingDocument != null) {
-            return WatermarkResult.createAlreadySubmitted();
+            return WatermarkResult.createAlreadySubmitted(id);
         }
 
         documentMap.put(id, document);
-
-
-        documentsToWaterMark = new ArrayBlockingQueue<>(100);
         documentsToWaterMark.add(document);
 
         return WatermarkResult.create(document);
@@ -78,5 +78,8 @@ class WatermarkService {
         return new WatermarkedDocument(document);
     }
 
-
+    public void clear() {
+        documentMap.clear();
+        documentsToWaterMark.clear();
+    }
 }

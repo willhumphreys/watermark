@@ -48,7 +48,7 @@ endpoint with the ticket id.
 localhost:8080/api/watermark?ticket=Bruce WayneThe Dark Code
 ```
 
-This returns a response containing the watermarked document
+This returns a response containing the watermarked document.
 
 ```json
 {

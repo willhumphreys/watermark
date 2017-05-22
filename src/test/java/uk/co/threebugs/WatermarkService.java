@@ -1,33 +1,38 @@
 package uk.co.threebugs;
 
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PreDestroy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
 
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.slf4j.LoggerFactory.getLogger;
+
 @Service
 class WatermarkService {
 
-
+    private static final int DOCUMENTS_QUEUE_SIZE = 100;
+    private static final Logger LOG = getLogger(lookup().lookupClass());
+    private final ExecutorService exService;
+    private final FutureTask<String> task;
     private Map<String, Document> documentMap;
     private ArrayBlockingQueue<Document> documentsToWaterMark;
+    private boolean alive;
 
     public WatermarkService() {
-
-        ExecutorService exService = Executors.newSingleThreadExecutor();
-
-        documentsToWaterMark = new ArrayBlockingQueue<>(100);
-
-        exService.submit(new FutureTask<>(getAddWatermarkCallable()));
-
+        alive = true;
+        exService = Executors.newSingleThreadExecutor();
+        documentsToWaterMark = new ArrayBlockingQueue<>(DOCUMENTS_QUEUE_SIZE);
+        task = new FutureTask<>(getAddWatermarkCallable());
+        exService.submit(task);
         documentMap = new HashMap<>();
     }
 
     private Callable<String> getAddWatermarkCallable() {
         return () -> {
-
-            boolean alive = true;
 
             while (alive) {
 
@@ -44,7 +49,8 @@ class WatermarkService {
                 documentToWatermark.addWatermark(watermark);
             }
 
-            return "hello";
+            return String.format("Shutting Down. Watermarks left on queue: %d",
+                    documentsToWaterMark.size());
         };
     }
 
@@ -81,5 +87,18 @@ class WatermarkService {
     public void clear() {
         documentMap.clear();
         documentsToWaterMark.clear();
+    }
+
+    @PreDestroy
+    public void shutdown() throws InterruptedException, ExecutionException {
+        LOG.info("Shutting down");
+        alive = false;
+        exService.shutdown();
+
+        String taskFinishedMessage = task.get();
+        LOG.info("Task finished: " + taskFinishedMessage);
+
+        exService.awaitTermination(1, TimeUnit.MINUTES);
+        LOG.info("Watermark service shutdown");
     }
 }

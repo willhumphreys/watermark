@@ -16,7 +16,7 @@ public class WatermarkDataRepository {
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
     private static final int DUMMY_SLEEP_TIME = 5000;
 
-    private Map<String, Map<String, Watermark>> watermarks;
+    private final Map<String, Map<String, Watermark>> watermarks;
 
     public WatermarkDataRepository() {
         watermarks = new HashMap<>();
@@ -29,7 +29,7 @@ public class WatermarkDataRepository {
         addWatermark(new Watermark("Journal of human flight routes", "Clark Kent", "journal"));
     }
 
-    public void addWatermark(Watermark watermark) {
+    private void addWatermark(Watermark watermark) {
         Map<String, Watermark> authorMap = watermarks.get(watermark.getAuthor());
         if (authorMap == null) {
             authorMap = new HashMap<>();

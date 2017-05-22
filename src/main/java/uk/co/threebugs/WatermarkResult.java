@@ -2,10 +2,10 @@ package uk.co.threebugs;
 
 public class WatermarkResult {
 
-    private Status status;
-    private Ticket ticket;
+    private final Status status;
+    private final Ticket ticket;
 
-    public WatermarkResult(Ticket ticket, Status status) {
+    private WatermarkResult(Ticket ticket, Status status) {
         this.ticket = ticket;
         this.status = status;
     }

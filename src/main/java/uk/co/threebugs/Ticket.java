@@ -14,7 +14,4 @@ public class Ticket {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 }

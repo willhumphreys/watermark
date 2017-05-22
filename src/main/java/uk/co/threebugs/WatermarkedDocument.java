@@ -2,10 +2,10 @@ package uk.co.threebugs;
 
 
 public class WatermarkedDocument {
+    private final Status status;
     private Document document;
-    private Status status;
 
-    public WatermarkedDocument(Status status) {
+    private WatermarkedDocument(Status status) {
         this.status = status;
     }
 

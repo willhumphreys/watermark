@@ -18,10 +18,10 @@ class WatermarkService {
     private static final int DOCUMENTS_QUEUE_SIZE = 100;
     private static final Logger LOG = getLogger(lookup().lookupClass());
     private final ExecutorService exService;
-    private Map<String, Document> documentMap;
-    private ArrayBlockingQueue<Document> documentsToWaterMark;
+    private final Map<String, Document> documentMap;
+    private final ArrayBlockingQueue<Document> documentsToWaterMark;
+    private final WatermarkDataRepository watermarkDataRepository;
     private boolean alive;
-    private WatermarkDataRepository watermarkDataRepository;
 
     @Autowired
     public WatermarkService(WatermarkDataRepository watermarkDataRepository) {

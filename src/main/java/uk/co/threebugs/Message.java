@@ -1,6 +1,6 @@
 package uk.co.threebugs;
 
-public class Message {
+class Message {
 
     private String message;
 

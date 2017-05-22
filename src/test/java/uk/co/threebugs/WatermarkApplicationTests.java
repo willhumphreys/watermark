@@ -34,7 +34,6 @@ public class WatermarkApplicationTests {
 
     @Test
     public void shouldReturnAStatusCodeOfAcceptedWhenTicketInitiallyChecked() {
-
         Document document = new Document("The Dark Code", "Bruce Wayne");
         HttpEntity<Document> request = new HttpEntity<>(document);
         Ticket ticket = this.restTemplate.postForObject("/api/watermark", request,
@@ -47,12 +46,10 @@ public class WatermarkApplicationTests {
                         Document.class);
 
         assertThat(waterMarkedDocumentEntity.getStatusCode(), is(equalTo(HttpStatus.ACCEPTED)));
-
     }
 
     @Test
     public void shouldReturnWatermarkedBookAfterProcessing() {
-
         Document document = new Document("The Dark Code", "Bruce Wayne");
         HttpEntity<Document> request = new HttpEntity<>(document);
         Ticket ticket = this.restTemplate.postForObject("/api/watermark", request,
@@ -76,12 +73,10 @@ public class WatermarkApplicationTests {
         assertThat(watermark.getAuthor(), is(equalTo("Bruce Wayne")));
         assertThat(watermark.getContent(), is(equalTo("book")));
         assertThat(watermark.getTopic(), is(equalTo("Science")));
-
     }
 
     @Test
     public void shouldReturnWatermarkedJournalAfterProcessing() {
-
         Document document = new Document("Journal of human flight routes", "Clark Kent");
         HttpEntity<Document> request = new HttpEntity<>(document);
         Ticket ticket = this.restTemplate.postForObject("/api/watermark", request,
@@ -90,7 +85,6 @@ public class WatermarkApplicationTests {
         String id = ticket.getId();
 
         ResponseEntity<Document> waterMarkedDocumentEntity = getWatermarkedDocumentEntity(id);
-
 
         assertThat(waterMarkedDocumentEntity.getStatusCode(), is(equalTo(HttpStatus.OK)));
 
@@ -105,7 +99,6 @@ public class WatermarkApplicationTests {
         assertThat(watermark.getAuthor(), is(equalTo("Clark Kent")));
         assertThat(watermark.getContent(), is(equalTo("journal")));
         assertThat(watermark.getTopic(), is(nullValue()));
-
     }
 
     private ResponseEntity<Document> getWatermarkedDocumentEntity(String id) {
@@ -123,6 +116,4 @@ public class WatermarkApplicationTests {
         } while (waterMarkedDocumentEntity.getStatusCode() == HttpStatus.ACCEPTED);
         return waterMarkedDocumentEntity;
     }
-
-
 }

@@ -34,7 +34,7 @@ public class WatermarkApplicationTests {
         String id = ticket.getId();
 
         ResponseEntity<Document> waterMarkedDocumentEntity =
-                this.restTemplate.getForEntity("/api/submit?ticket=" + id,
+                this.restTemplate.getForEntity("/api/watermark?ticket=" + id,
                         Document.class);
 
         assertThat(waterMarkedDocumentEntity.getStatusCode(), is(equalTo(HttpStatus.ACCEPTED)));
@@ -103,7 +103,7 @@ public class WatermarkApplicationTests {
         ResponseEntity<Document> waterMarkedDocumentEntity;
         do {
             waterMarkedDocumentEntity =
-                    this.restTemplate.getForEntity("/api/submit?ticket=" + id,
+                    this.restTemplate.getForEntity("/api/watermark?ticket=" + id,
                             Document.class);
 
             try {

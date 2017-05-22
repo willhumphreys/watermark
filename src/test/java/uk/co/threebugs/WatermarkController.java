@@ -46,7 +46,7 @@ class WatermarkController {
                 response = ResponseEntity.badRequest().build();
                 break;
             default:
-                throw new IllegalStateException("Unknown status " + watermarkedDocument.getStatus());
+                throw new IllegalStateException("UnknownTicket status " + watermarkedDocument.getStatus());
         }
 
         return response;

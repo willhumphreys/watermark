@@ -29,4 +29,12 @@ public class Document {
     public Watermark getWatermark() {
         return watermark;
     }
+
+    public void addWatermark(Watermark watermark) {
+        this.watermark = watermark;
+    }
+
+    public String getId() {
+        return author + title;
+    }
 }

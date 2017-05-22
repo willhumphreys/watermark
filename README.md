@@ -1,3 +1,5 @@
+##Build and run
+
 You can use the `service.sh` script to build and run the application.
 
 ```
@@ -16,7 +18,7 @@ scripts and tests inside a docker container:
 ```
 
 
-## Endpoints.
+## Endpoints
 
 
 To submit a document for watermarking you can `post` to the watermark endpoint.

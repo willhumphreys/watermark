@@ -22,7 +22,9 @@ class WatermarkController {
 
         if (watermarkResult.getStatus() == Status.AlreadySubmitted) {
 
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new Message("Document has already been submitted. " +
+                            "Ticket id '" + watermarkResult.getTicket().getId() + "'"));
         }
         return ResponseEntity.status(HttpStatus.OK).body(watermarkResult.getTicket());
     }
@@ -40,10 +42,12 @@ class WatermarkController {
                 response = ResponseEntity.ok(watermarkedDocument.getDocument());
                 break;
             case AlreadyProcessing:
-                response = ResponseEntity.status(HttpStatus.ACCEPTED).build();
+                response = ResponseEntity.status(HttpStatus.ACCEPTED)
+                        .body(new Message("Ticket is being processed " + ticket));
                 break;
             case UnknownTicket:
-                response = ResponseEntity.badRequest().build();
+                response = ResponseEntity.badRequest()
+                        .body(new Message("Unknown ticket " + ticket));
                 break;
             default:
                 throw new IllegalStateException("UnknownTicket status " + watermarkedDocument.getStatus());

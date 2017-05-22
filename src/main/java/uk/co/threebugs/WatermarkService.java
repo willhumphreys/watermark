@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PreDestroy;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.*;
 
 import static java.lang.invoke.MethodHandles.lookup;
@@ -18,22 +16,22 @@ class WatermarkService {
     private static final int DOCUMENTS_QUEUE_SIZE = 100;
     private static final Logger LOG = getLogger(lookup().lookupClass());
     private final ExecutorService exService;
-    private final Map<String, Document> documentMap;
+    private final DocumentRepository documentRepository;
     private final ArrayBlockingQueue<Document> documentsToWaterMark;
     private final WatermarkDataRepository watermarkDataRepository;
     private boolean alive;
 
     @Autowired
-    public WatermarkService(WatermarkDataRepository watermarkDataRepository) {
+    public WatermarkService(WatermarkDataRepository watermarkDataRepository, DocumentRepository documentRepository) {
 
         this.watermarkDataRepository = watermarkDataRepository;
+        this.documentRepository = documentRepository;
 
         alive = true;
         exService = Executors.newSingleThreadExecutor();
         documentsToWaterMark = new ArrayBlockingQueue<>(DOCUMENTS_QUEUE_SIZE);
         FutureTask<String> task = new FutureTask<>(getAddWatermarkCallable());
         exService.submit(task);
-        documentMap = new HashMap<>();
     }
 
     private Callable<String> getAddWatermarkCallable() {
@@ -56,13 +54,13 @@ class WatermarkService {
     public WatermarkResult submit(Document document) {
         String id = document.getId();
 
-        Document existingDocument = documentMap.get(id);
+        Document existingDocument = documentRepository.get(id);
 
         if (existingDocument != null) {
             return WatermarkResult.createAlreadySubmitted(id);
         }
 
-        documentMap.put(id, document);
+        documentRepository.store(document);
         documentsToWaterMark.add(document);
 
         return WatermarkResult.create(document);
@@ -70,7 +68,7 @@ class WatermarkService {
 
     public WatermarkedDocument get(String ticket) {
 
-        Document document = this.documentMap.get(ticket);
+        Document document = this.documentRepository.get(ticket);
 
         if (document == null) {
             return WatermarkedDocument.UnknownTicket();
@@ -84,8 +82,8 @@ class WatermarkService {
     }
 
     public void clear() {
-        documentMap.clear();
-        documentsToWaterMark.clear();
+        this.documentRepository.clear();
+        this.documentsToWaterMark.clear();
     }
 
     @PreDestroy

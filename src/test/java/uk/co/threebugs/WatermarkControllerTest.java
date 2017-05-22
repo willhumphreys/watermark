@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WatermarkControllerTest {
@@ -28,11 +29,20 @@ public class WatermarkControllerTest {
     @Test
     public void shouldReturnAConflictStatusIfTheDocumentHasAlreadyBeenSubmitted() throws Exception {
 
-        Mockito.when(watermarkService.submit(Mockito.anyObject())).
+        when(watermarkService.submit(Mockito.anyObject())).
                 thenReturn(WatermarkResult.createAlreadySubmitted("id"));
 
         ResponseEntity<?> watermark = watermarkController.watermark(
                 new Document("The Dark Code", "Bruce Wayne"));
         assertThat(watermark.getStatusCode(), is(HttpStatus.CONFLICT));
+    }
+
+    @Test
+    public void shouldReturnABadRequestStatusIfTheTicketIsUnknown() throws Exception {
+        when(watermarkService.get(Mockito.anyString())).thenReturn(WatermarkedDocument.UnknownTicket());
+
+        ResponseEntity<?> notAValidTick = watermarkController.watermark("NotAValidTick");
+
+        assertThat(notAValidTick.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 }

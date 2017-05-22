@@ -5,11 +5,6 @@ public class Document {
     private String author;
     private Watermark watermark;
 
-    public Document(String title, String author, Watermark watermark) {
-        this(title, author);
-        this.watermark = watermark;
-    }
-
     public Document(String title, String author) {
         this.title = title;
         this.author = author;
